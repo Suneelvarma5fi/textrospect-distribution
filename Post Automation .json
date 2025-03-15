@@ -1,0 +1,53 @@
+{
+  "name": "Twitter Automation",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -180,
+        -40
+      ],
+      "id": "6ae8f2c2-a673-43c9-ad31-5b7f64b3f5bc",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const axios = require('axios');\nconst cheerio = require('cheerio');\n\nasync function scrapeWebsite() {\n    try {\n        const response = await axios.get('https://www.overheardeverywhere.com');\n        const $ = cheerio.load(response.data);\n\n        // Extract all links\n        const links = [];\n        $('a').each((index, element) => {\n            const link = $(element).attr('href');\n            if (link) {\n                links.push(link);\n            }\n        });\n\n        return [\n            {\n                json: {\n                    extracted_links: links\n                }\n            }\n        ];\n    } catch (error) {\n        return [\n            {\n                json: {\n                    error: error.message\n                }\n            }\n        ];\n    }\n}\n\nreturn scrapeWebsite();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        200,
+        0
+      ],
+      "id": "46ee8ee2-f12c-46db-80a7-7bf2e637c298",
+      "name": "Code"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "88ec6766-e8db-4f72-bade-08c37f580079",
+  "meta": {
+    "instanceId": "9c46901df2f491ed0064d3bec1d398a6e12bf2625c25aa57c2be2fdf57728fc6"
+  },
+  "id": "d5GwdUn6lbGcJG2A",
+  "tags": []
+}
